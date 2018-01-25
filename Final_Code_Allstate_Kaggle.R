@@ -1,4 +1,4 @@
-#libraries
+#libraries required for this code 
 
 library(caret)
 library(e1071)
@@ -21,6 +21,7 @@ Test = read.csv("allstate_test.csv", header = T)
 
 # Combining Train and Test datasets
 all_data = rbind(Train[,1:131], Test)
+
 
 ### Data Pre-Processing
 ## Treating Continous variables
@@ -137,7 +138,7 @@ dtrain = xgb.DMatrix(data = tr_sparse[,1:133], label = tr_label_log )
 dtest = xgb.DMatrix(data = ts_sparse[,1:133], label = ts_label_log )
 
 
-## xgboost
+## preparation for xgboost model 
 
 #defining default parameters
 params <- list(booster = "gbtree", objective = "reg:linear", eta=0.1, gamma=0, 
@@ -149,9 +150,9 @@ params <- list(booster = "gbtree", objective = "reg:linear", eta=0.1, gamma=0,
 xgbcv <- xgb.cv( params = params, data = dtrain, nrounds = 100, nfold = 5, 
                  showsd = T, stratified = T, print_every_n = 10, early_stopping_rounds = 20, maximize = F)
 
+
 # finding the best nrounds value
 xgbcv$best_iteration
-
 
 #training the model on default parameters with nrounds = 100 
 xgb1 <- xgb.train (params = params, 
